@@ -34,5 +34,5 @@ jobs:
       - name: Building and Pushing User-service
         run: mvn package dockerfile:push --file department-service/pom.xml
         env:
-          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          MAVEN_USERNAME: venkat7010
+          MAVEN_PASSWORD: Dockerhub@529
