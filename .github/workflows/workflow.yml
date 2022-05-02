@@ -23,11 +23,11 @@ jobs:
         with:
          distribution: 'adopt'
          java-version: '11'
-         server-id: docker.io
+         server-id: 'docker.io'
          server-username: MAVEN_USERNAME
          server-password: MAVEN_PASSWORD 
       - name: Building and Pushing User-service
-        run: mvn package dockerfile:push --file department-service/pom.xml
+        run: mvn package dockerfile:push --file employee-service/pom.xml
         env:
-          MAVEN_USERNAME: venkat7010
-          MAVEN_PASSWORD: Dockerhub@529
+          MAVEN_USERNAME: 'venkat7010'
+          MAVEN_PASSWORD: 'Dockerhub@529'
