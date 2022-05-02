@@ -47,8 +47,7 @@ jobs:
           push: true
           context: ./cloud-config-server
           tags: venkat7010/cloud-config-server:0.0.1
-        
-  
+          
       - name: Building Maven Department Service Package
         run: mvn -B package --file department-service/pom.xml
       - name: Build and push Department Service to DockerHub
@@ -76,6 +75,4 @@ jobs:
           push: true
           context: ./cloud-gateway
           tags: venkat7010/cloud-gateway:0.0.1
-      
-     
       
