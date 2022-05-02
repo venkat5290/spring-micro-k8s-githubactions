@@ -22,7 +22,10 @@ jobs:
         uses: actions/setup-java@v2
         with:
          distribution: 'adopt'
-         java-version: '11' 
+         java-version: '11'
+         server-id: docker.io
+         server-username: MAVEN_USERNAME
+         server-password: MAVEN_PASSWORD
       
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -30,49 +33,8 @@ jobs:
           username: venkat7010
           password: Dockerhub@529
       
-      - name: Building Maven Eureka Server Package
-        run: mvn -B package --file eureka-server/pom.xml
-      - name: Build and push Eureka Service to DockerHub
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          context: ./eureka-server
-          tags: venkat7010/eureka-server:0.0.1
-      
-      - name: Building Maven Cloud Config Server Package
-        run: mvn -B package --file cloud-config-server/pom.xml
-      - name: Build and push Cloud Config Server to DockerHub
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          context: ./cloud-config-server
-          tags: venkat7010/cloud-config-server:0.0.1
-          
-      - name: Building Maven Department Service Package
-        run: mvn -B package --file department-service/pom.xml
-      - name: Build and push Department Service to DockerHub
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          context: ./department-service
-          tags: venkat7010/department-service:0.0.1  
-          
-      - name: Building Maven Employee Service Package
-        run: mvn -B package --file employee-service/pom.xml
-      - name: Build and push Employee Service to DockerHub
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          context: ./employee-service
-          tags: venkat7010/employee-service:0.0.1
-      
-        
-      - name: Building Maven Cloud Gateway Package
-        run: mvn -B package --file employee-service/pom.xml
-      - name: Build and push Cloud Gateway to DockerHub
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          context: ./cloud-gateway
-          tags: venkat7010/cloud-gateway:0.0.1
-      
+      - name: Build and Push department-service
+        run: mvn package dockerfile:push --file department-service/pom.xml
+        env:
+          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
