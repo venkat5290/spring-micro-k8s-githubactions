@@ -24,8 +24,8 @@ jobs:
          distribution: 'adopt'
          java-version: '11'
          server-id: docker.io
-         server-username: MAVEN_USERNAME
-         server-password: MAVEN_PASSWORD
+         server-username: venkat7010
+         server-password: Dockerhub@529
       
       - name: Build and Push department-service
         run: mvn package dockerfile:push --file department-service/pom.xml
