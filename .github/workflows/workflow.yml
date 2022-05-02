@@ -22,12 +22,16 @@ jobs:
         uses: actions/setup-java@v2
         with:
          distribution: 'adopt'
-         java-version: '11'
-         server-id: 'docker.io'
-         server-username: MAVEN_USERNAME
-         server-password: MAVEN_PASSWORD 
-      - name: Building and Pushing User-service
-        run: mvn package dockerfile:push --file employee-service/pom.xml
-        env:
-          MAVEN_USERNAME: 'venkat7010'
-          MAVEN_PASSWORD: 'Dockerhub@529'
+         java-version: '11' 
+      - name: Building and Pushing Employee Service
+        run: mvn -B package --file employee-service/pom.xml
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: venkat7010
+          password: Dockerhub@529
+      - name: Build and push 
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: venkat7010/employee-service:latest
