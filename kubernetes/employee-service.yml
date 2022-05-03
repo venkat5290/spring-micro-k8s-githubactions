@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: employee-service-app
-          image: venkat7010/employee-service:0.0.1
+          image: venkat7010/employee-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8081

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: department-service-app
-          image: venkat7010/department-service:0.0.1
+          image: venkat7010/department-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8082

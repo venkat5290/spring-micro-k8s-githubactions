@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: cloud-gateway-app
-          image: venkat7010/cloud-gateway:0.0.1
+          image: venkat7010/cloud-gateway:latest
           imagePullPolicy: Always
           ports:
            - containerPort: 9191

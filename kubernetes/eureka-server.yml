@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
         - name: eureka
-          image: venkat7010/eureka-server:0.0.1
+          image: venkat7010/eureka-server:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8761
