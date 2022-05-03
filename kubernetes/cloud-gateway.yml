@@ -30,6 +30,7 @@ metadata:
 spec:
   selector:
     app: cloud-gateway-app
+  type: LoadBalancer
   ports:
     - port: 80
       targetPort: 9191

@@ -9,6 +9,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  RESOURCE_GROUP: devops-test
+  CLUSTER_NAME: microservices_test
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
@@ -16,20 +19,88 @@ jobs:
  
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Git 
+      - name: Checkout Git
         uses: actions/checkout@v3
       - name: Set up JDK 11
-        uses: actions/setup-java@v3.2.0
+        uses: actions/setup-java@v2
         with:
-         distribution: 'adopt'
-         java-version: '11'
-      - uses: s4u/maven-settings-action@v2.3.0
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
         with:
-          servers: |
-            [{
-                "id": "docker.io",
-                "username": "venkat7010",
-                "password": "Dockerhub@529"
-            }]
-      - name: Build and Push department-service
-        run: mvn package dockerfile:push --file department-service/pom.xml
+          username: {{ secrets.DOCKER_USERNAME }}
+          password: {{ secrets.DOCKER_PASSWORD }}
+
+      - name: Building Maven Eureka Server Package
+        run: mvn -B package --file eureka-server/pom.xml
+      - name: Build and push Eureka Service to DockerHub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./eureka-server
+          tags: venkat7010/eureka-server:0.0.1
+
+      - name: Building Maven Cloud Config Server Package
+        run: mvn -B package --file cloud-config-server/pom.xml
+      - name: Build and push Cloud Config Server to DockerHub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./cloud-config-server
+          tags: venkat7010/cloud-config-server:0.0.1
+
+      - name: Building Maven Department Service Package
+        run: mvn -B package --file department-service/pom.xml
+      - name: Build and push Department Service to DockerHub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./department-service
+          tags: venkat7010/department-service:0.0.1
+
+      - name: Building Maven Employee Service Package
+        run: mvn -B package --file employee-service/pom.xml
+      - name: Build and push Employee Service to DockerHub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./employee-service
+          tags: venkat7010/employee-service:0.0.1
+
+
+      - name: Building Maven Cloud Gateway Package
+        run: mvn -B package --file employee-service/pom.xml
+      - name: Build and push Cloud Gateway to DockerHub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./cloud-gateway
+          tags: venkat7010/cloud-gateway:0.0.1
+
+  deploy:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: azure login using cred
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CRED }}
+          allow-no-subscriptions: true
+
+      - name: Azure Kubernetes set context
+        uses: Azure/aks-set-context@v2.1
+        with:
+          resource-group: ${{ env.RESOURCE_GROUP }}
+          cluster-name: ${{ env.CLUSTER_NAME }}
+      - name: Deploy to Kubernetes cluster
+        uses: Azure/k8s-deploy@v3.1
+        with:
+          manifests: |
+            dir/kubernetes
+
+          action: deploy
+
